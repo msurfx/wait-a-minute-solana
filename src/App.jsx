@@ -25,6 +25,21 @@ export default function App() {
   const [sendTo, setSendTo] = useState(DEMO_RECIPIENT);
   const [networkLoad, setNetworkLoad] = useState(68);
   const [sending, setSending] = useState(false);
+  const [airdropping, setAirdropping] = useState(false);
+
+  const handleAirdrop = useCallback(async () => {
+    if (!publicKey) return;
+    setAirdropping(true);
+    try {
+      const sig = await connection.requestAirdrop(publicKey, 1_000_000_000);
+      await connection.confirmTransaction(sig);
+    } catch (e) {
+      console.error('Airdrop error:', e);
+      alert('Airdrop failed: ' + (e.message || 'Unknown error'));
+    } finally {
+      setAirdropping(false);
+    }
+  }, [publicKey, connection]);
 
   // Simulate network load
   useEffect(() => {
@@ -162,19 +177,28 @@ export default function App() {
           </div>
 
           {connected ? (
-            <button onClick={disconnect} style={{
-              display:'flex',alignItems:'center',gap:8,padding:'7px 14px',borderRadius:11,
-              background:'rgba(0,255,163,0.05)',border:'1px solid rgba(0,255,163,0.12)',
-              color:'#00FFA3',fontSize:13,fontFamily:mono,cursor:'pointer',
-            }}>
-              <div style={{ width:8,height:8,borderRadius:'50%',background:'#00FFA3' }} />
-              {shortenedAddress}
-              {balance !== null && (
-                <span style={{ color:'rgba(255,255,255,0.35)',marginLeft:6 }}>
-                  {balance.toFixed(3)} SOL
-                </span>
-              )}
-            </button>
+            <>
+              <button onClick={handleAirdrop} disabled={airdropping} style={{
+                padding:'7px 14px',borderRadius:11,cursor:'pointer',
+                background:'rgba(108,92,231,0.08)',border:'1px solid rgba(108,92,231,0.2)',
+                color:'#a29bfe',fontSize:13,fontFamily:mono,opacity:airdropping?0.5:1,
+              }}>
+                {airdropping ? 'Airdropping...' : '💧 Airdrop 1 SOL'}
+              </button>
+              <button onClick={disconnect} style={{
+                display:'flex',alignItems:'center',gap:8,padding:'7px 14px',borderRadius:11,
+                background:'rgba(0,255,163,0.05)',border:'1px solid rgba(0,255,163,0.12)',
+                color:'#00FFA3',fontSize:13,fontFamily:mono,cursor:'pointer',
+              }}>
+                <div style={{ width:8,height:8,borderRadius:'50%',background:'#00FFA3' }} />
+                {shortenedAddress}
+                {balance !== null && (
+                  <span style={{ color:'rgba(255,255,255,0.35)',marginLeft:6 }}>
+                    {balance.toFixed(3)} SOL
+                  </span>
+                )}
+              </button>
+            </>
           ) : (
             <button onClick={connect} disabled={connecting} style={{
               background:'linear-gradient(135deg,#00FFA3,#00D68F)',border:'none',
