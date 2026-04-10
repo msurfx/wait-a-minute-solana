@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSolflare } from './hooks/useSolflare';
 import { QUEUE_TIERS, buildQueuedTransaction, createQueueEntry } from './utils/queue';
 import QueueCard from './components/QueueCard';
+import clockLogo from './assets/clock-logo.svg';
 
 const mono = "'JetBrains Mono', monospace";
 const display = "'Outfit', sans-serif";
@@ -151,7 +152,7 @@ export default function App() {
             background:'linear-gradient(135deg,#00FFA3,#00D68F)',
             display:'flex',alignItems:'center',justifyContent:'center',
             fontSize:17,fontWeight:800,color:'#060b16',
-          }}>⏳</div>
+          }}><img src={clockLogo} alt="Wait a Minute" style={{width:24,height:24}} /></div>
           <div>
             <div style={{ fontSize:16,fontWeight:700,letterSpacing:-0.5 }}>Wait a Minute</div>
             <div style={{ fontSize:9,color:'rgba(255,255,255,0.25)',letterSpacing:2,textTransform:'uppercase' }}>
@@ -305,7 +306,8 @@ export default function App() {
                     background:'rgba(0,255,163,0.03)',border:'2px dashed rgba(0,255,163,0.12)',
                     color:'#00FFA3',fontSize:14,fontWeight:600,marginBottom:18,fontFamily:display,
                   }}>
-                    ⏳ I Can Wait — Queue a Transaction
+                    <img src={clockLogo} alt="" style={{width:18,height:18,marginRight:8,verticalAlign:'middle'}} />
+                    I Can Wait — Queue a Transaction
                   </button>
                 ) : (
                   <div style={{
@@ -462,7 +464,8 @@ export default function App() {
           display:'flex',justifyContent:'space-between',fontSize:10,
           color:'rgba(255,255,255,0.15)',
         }}>
-          <span>Wait a Minute ⏳ · Solflare × Eitherway · Frontier 2026</span>
+          <span><img src={clockLogo} alt="" style={{width:14,height:14,marginRight:4,verticalAlign:'middle'}} />
+          Wait a Minute · Solflare × Eitherway · Frontier 2026</span>
           <span>Solana Devnet</span>
         </div>
       </div>
